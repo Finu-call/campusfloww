@@ -17,11 +17,22 @@
 </head>
 <body>
     <div id="app" class="app-container">
-        <!-- Sidebar (Desktop) -->
+        <!-- Sidebar (Desktop/Mobile overlay) -->
         <aside id="sidebar" class="sidebar hidden"></aside>
 
         <!-- Main Content Area -->
         <main id="main-content" class="main-content">
+            <!-- Mobile Header (Only visible on small screens) -->
+            <header id="mobile-header" class="mobile-header">
+                <div class="flex items-center gap-2">
+                    <i class="ph-fill ph-graduation-cap text-2xl text-accent-primary"></i>
+                    <h2 class="font-bold text-lg">CampusFlow</h2>
+                </div>
+                <button id="mobile-menu-btn" class="p-2 rounded-md hover:bg-bg-tertiary">
+                    <i class="ph ph-list text-2xl"></i>
+                </button>
+            </header>
+
             <!-- Dynamic content injected here -->
         </main>
 

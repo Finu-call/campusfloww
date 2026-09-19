@@ -25,7 +25,7 @@ export const Modals = {
                     <label class="form-label">Institution</label>
                     <input type="text" id="cc-inst" class="form-input">
                 </div>
-                <div class="flex gap-4 mb-6">
+                <div class="flex flex-col-mobile gap-4 mb-6">
                     <div class="form-group" style="flex: 1;">
                         <label class="form-label">Semester</label>
                         <input type="text" id="cc-sem" class="form-input">
@@ -80,7 +80,7 @@ export const Modals = {
                 <p>Are you sure you want to remove <strong>${name}</strong> from this classroom?</p>
                 <p class="text-sm text-muted mt-2">Their account will not be deleted, but they will lose access to this classroom's resources.</p>
             </div>
-            <div class="flex gap-4">
+            <div class="flex flex-col-mobile gap-4">
                 <button class="btn btn-outline flex-1" onclick="window.UI.closeModal('remove-modal')">Cancel</button>
                 <button class="btn btn-primary flex-1" style="background: var(--danger);" onclick="window.App.handleRemoveStudent('${id}')">Remove</button>
             </div>
@@ -103,7 +103,7 @@ export const Modals = {
                     <li>Members</li>
                 </ul>
             </div>
-            <div class="flex gap-4">
+            <div class="flex flex-col-mobile gap-4">
                 <button class="btn btn-outline flex-1" onclick="window.UI.closeModal('leave-modal')">Cancel</button>
                 <button class="btn btn-primary flex-1" style="background: var(--danger);" onclick="window.App.handleLeaveClassroom('${id}')">Leave Classroom</button>
             </div>
@@ -130,7 +130,7 @@ export const Modals = {
                     <label class="form-label">Title</label>
                     <input type="text" id="up-title" class="form-input" required>
                 </div>
-                <div class="flex gap-4 mb-4">
+                <div class="flex flex-col-mobile gap-4 mb-4">
                     <div class="form-group" style="flex: 1;">
                         <label class="form-label">Subject</label>
                         <input type="text" id="up-subject" class="form-input" required>
@@ -207,7 +207,7 @@ export const Modals = {
                     <label class="form-label">Title</label>
                     <input type="text" id="ass-title" class="form-input" required>
                 </div>
-                <div class="flex gap-4 mb-4">
+                <div class="flex flex-col-mobile gap-4 mb-4">
                     <div class="form-group" style="flex: 2;">
                         <label class="form-label">Subject</label>
                         <input type="text" id="ass-subject" class="form-input" required>
@@ -253,7 +253,7 @@ export const Modals = {
                     <input type="text" id="delete-class-confirm" class="form-input" oninput="document.getElementById('btn-del-class').disabled = (this.value !== '${name}')">
                 </div>
             </div>
-            <div class="flex gap-4">
+            <div class="flex flex-col-mobile gap-4">
                 <button class="btn btn-outline flex-1" onclick="window.UI.closeModal('delete-class-modal')">Cancel</button>
                 <button id="btn-del-class" class="btn btn-primary flex-1" style="background: var(--danger);" disabled onclick="window.App.handleDeleteClassroom('${id}')">Permanently Delete</button>
             </div>
@@ -271,7 +271,7 @@ export const Modals = {
                 <p class="font-medium text-lg mb-2">${title}</p>
                 <p class="text-sm text-muted">This will permanently delete the resource and its stored file.</p>
             </div>
-            <div class="flex gap-4">
+            <div class="flex flex-col-mobile gap-4">
                 <button class="btn btn-outline flex-1" onclick="window.UI.closeModal('delete-res-modal')">Cancel</button>
                 <button class="btn btn-primary flex-1" style="background: var(--danger);" onclick="window.App.handleDeleteResource('${id}', '${filePath}')">Delete</button>
             </div>
@@ -289,7 +289,7 @@ export const Modals = {
                 <p class="font-medium text-lg mb-2">${title}</p>
                 <p class="text-sm text-muted">This announcement will be permanently removed.</p>
             </div>
-            <div class="flex gap-4">
+            <div class="flex flex-col-mobile gap-4">
                 <button class="btn btn-outline flex-1" onclick="window.UI.closeModal('delete-ann-modal')">Cancel</button>
                 <button class="btn btn-primary flex-1" style="background: var(--danger);" onclick="window.App.handleDeleteAnnouncement('${id}')">Delete</button>
             </div>
@@ -307,7 +307,7 @@ export const Modals = {
                 <p class="font-medium text-lg mb-2">${title}</p>
                 <p class="text-sm text-muted">This assignment will be permanently removed.</p>
             </div>
-            <div class="flex gap-4">
+            <div class="flex flex-col-mobile gap-4">
                 <button class="btn btn-outline flex-1" onclick="window.UI.closeModal('delete-ass-modal')">Cancel</button>
                 <button class="btn btn-primary flex-1" style="background: var(--danger);" onclick="window.App.handleDeleteAssignment('${id}')">Delete</button>
             </div>
@@ -324,7 +324,7 @@ export const Modals = {
             <div class="text-center mb-6">
                 <p class="text-muted">This will permanently remove activity records for this classroom.</p>
             </div>
-            <div class="flex gap-4">
+            <div class="flex flex-col-mobile gap-4">
                 <button class="btn btn-outline flex-1" onclick="window.UI.closeModal('clear-act-modal')">Cancel</button>
                 <button class="btn btn-primary flex-1" style="background: var(--danger);" onclick="window.App.handleClearActivity('${classroomId}')">Clear History</button>
             </div>
@@ -353,7 +353,7 @@ export const Modals = {
                     <input type="text" id="delete-acc-confirm" class="form-input" oninput="document.getElementById('btn-del-acc').disabled = (this.value !== 'DELETE')">
                 </div>
             </div>
-            <div class="flex gap-4">
+            <div class="flex flex-col-mobile gap-4">
                 <button class="btn btn-outline flex-1" onclick="window.UI.closeModal('delete-acc-modal')">Cancel</button>
                 <button id="btn-del-acc" class="btn btn-primary flex-1" style="background: var(--danger);" disabled onclick="window.App.handleDeleteAccount()">Permanently Delete Account</button>
             </div>

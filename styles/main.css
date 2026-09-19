@@ -110,6 +110,15 @@ a:hover {
 .justify-center { justify-content: center; }
 .gap-2 { gap: 0.5rem; }
 .gap-4 { gap: 1rem; }
+.gap-6 { gap: 1.5rem; }
 .py-16 { padding-top: 4rem; padding-bottom: 4rem; }
 .text-lg { font-size: 1.125rem; }
 .text-xl { font-size: 1.25rem; }
+.flex-wrap { flex-wrap: wrap; }
+
+/* Responsive Layout Helpers */
+@media (max-width: 768px) {
+    .flex-col-mobile { flex-direction: column !important; }
+    .flex-col-mobile > * { width: 100% !important; }
+    .hidden-mobile { display: none !important; }
+}

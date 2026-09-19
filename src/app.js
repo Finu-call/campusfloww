@@ -69,6 +69,11 @@ class AppController {
         const sidebarEl = document.getElementById('sidebar');
         const bottomNavEl = document.getElementById('bottom-nav');
 
+        // Close mobile sidebar if open
+        if (sidebarEl && sidebarEl.classList.contains('open')) {
+            sidebarEl.classList.remove('open');
+        }
+
         if (!user) {
             sidebarEl.classList.add('hidden');
             bottomNavEl.classList.add('hidden');
@@ -637,6 +642,22 @@ class AppController {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    const app = new AppController();
-    app.init();
+    // Initialize Theme
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+        document.documentElement.setAttribute('data-theme', savedTheme);
+    }
+    
+    // Initialize App
+    window.App = new AppController();
+    window.App.init();
+
+    // Mobile menu toggle
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const sidebar = document.getElementById('sidebar');
+    if (mobileMenuBtn && sidebar) {
+        mobileMenuBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('open');
+        });
+    }
 });

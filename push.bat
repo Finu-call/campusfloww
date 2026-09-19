@@ -17,11 +17,8 @@ git remote set-url origin https://github.com/Finu-call/campusflow.git
 :: Stage all changes
 git add .
 
-:: Prompt for commit message
-set /p commit_msg="Enter commit message (or press enter for 'Auto-update'): "
-
-:: Default message if empty
-if "%commit_msg%"=="" set commit_msg=Auto-update
+:: Auto-generate timestamped commit message
+set commit_msg=Auto-update: %date% %time%
 
 :: Commit and Push
 echo.

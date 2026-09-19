@@ -68,7 +68,7 @@ export const HostDashboard = {
                     </div>
                 </div>
 
-                <div class="flex gap-4 mb-8" style="flex-wrap: wrap;">
+                <div class="flex gap-4 mb-8 flex-wrap">
                     <div class="card text-center cursor-pointer card-hoverable" style="flex: 1; min-width: 150px;" onclick="window.location.hash='#members'">
                         <h2 style="font-size: 2.5rem; color: var(--accent-primary);">${studentsCount}</h2>
                         <p class="font-medium text-sm text-muted">Students</p>
@@ -171,7 +171,7 @@ export const HostDashboard = {
                             <label class="form-label">Institution</label>
                             <input type="text" id="cs-inst" class="form-input" value="${classroom.institution || ''}">
                         </div>
-                        <div class="flex gap-4 mb-6">
+                        <div class="flex flex-col-mobile gap-4 mb-6">
                             <div class="form-group" style="flex: 1;">
                                 <label class="form-label">Semester</label>
                                 <input type="text" id="cs-sem" class="form-input" value="${classroom.semester || ''}">
@@ -189,7 +189,7 @@ export const HostDashboard = {
                     <h3 class="mb-2 text-danger">Danger Zone</h3>
                     <p class="text-sm text-muted mb-4">Actions here are permanent and cannot be undone.</p>
                     
-                    <div class="flex justify-between items-center py-4 border-t border-b" style="border-color: rgba(239, 68, 68, 0.2);">
+                    <div class="flex flex-col-mobile items-start gap-4 justify-between py-4 border-t border-b" style="border-color: rgba(239, 68, 68, 0.2);">
                         <div>
                             <h4 class="m-0 text-base">Clear Activity History</h4>
                             <p class="text-sm text-muted m-0">Permanently remove all activity logs.</p>
@@ -197,7 +197,7 @@ export const HostDashboard = {
                         <button class="btn btn-outline text-danger" onclick="window.App.Modals.showClearActivityModal('${classroom.id}')">Clear History</button>
                     </div>
 
-                    <div class="flex justify-between items-center py-4">
+                    <div class="flex flex-col-mobile items-start gap-4 justify-between py-4">
                         <div>
                             <h4 class="m-0 text-base">Delete Classroom</h4>
                             <p class="text-sm text-muted m-0">Permanently delete this classroom and all its data.</p>
