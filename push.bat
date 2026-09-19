@@ -8,8 +8,11 @@ if not exist .git (
     echo Initializing Git repository...
     git init
     git branch -M main
-    git remote add origin https://github.com/finu1256-lab/campusflow.git
 )
+
+:: Ensure git remote is set correctly to the new URL (runs every time just to be safe)
+git remote add origin https://github.com/Finu-call/campusflow.git 2>nul
+git remote set-url origin https://github.com/Finu-call/campusflow.git
 
 :: Stage all changes
 git add .
