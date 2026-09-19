@@ -13,3 +13,4 @@ export const adminSupabase = window.supabase.createClient(SUPABASE_URL, SUPABASE
         autoRefreshToken: false
     }
 });
+
