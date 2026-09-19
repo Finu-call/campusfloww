@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusFlow - Your classroom, together.</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/layout.css">
+    <link rel="stylesheet" href="styles/components.css">
+</head>
+<body>
+    <div id="app" class="app-container">
+        <!-- Sidebar (Desktop) -->
+        <aside id="sidebar" class="sidebar hidden"></aside>
+
+        <!-- Main Content Area -->
+        <main id="main-content" class="main-content">
+            <!-- Dynamic content injected here -->
+        </main>
+
+        <!-- Bottom Navigation (Mobile) -->
+        <nav id="bottom-nav" class="bottom-nav hidden"></nav>
+    </div>
+
+    <!-- Modals Container -->
+    <div id="modal-container"></div>
+    
+    <!-- Toast Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script type="module" src="src/app.js"></script>
+</body>
+</html>
