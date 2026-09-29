@@ -58,11 +58,11 @@ class AppController {
             .on('postgres_changes', { event: '*', schema: 'public', table: 'classroom_members', filter: `classroom_id=eq.${classroomId}` }, () => {
                 if(window.location.hash === '#members' || window.location.hash === '#classroom') this.handleRoute();
             })
-            .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'classroom_messages', filter: `classroom_id=eq.${classroomId}` }, () => {
-                if (window.location.hash === '#chat') this.refreshChatMessages();
+            .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'classroom_messages', filter: `classroom_id=eq.${classroomId}` }, (payload) => {
+                if (window.location.hash === '#chat') this.appendRealtimeChatMessage(payload.new);
             })
-            .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'classroom_messages', filter: `classroom_id=eq.${classroomId}` }, () => {
-                if (window.location.hash === '#chat') this.refreshChatMessages();
+            .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'classroom_messages', filter: `classroom_id=eq.${classroomId}` }, (payload) => {
+                if (window.location.hash === '#chat') this.removeRealtimeChatMessage(payload.old.id);
             })
             .subscribe();
 
@@ -666,6 +666,35 @@ class AppController {
         if (wasNearBottom) {
             container.scrollTop = container.scrollHeight;
         }
+    }
+
+    async appendRealtimeChatMessage(rawMessage) {
+        const container = document.getElementById('chat-messages');
+        if (!container || window.location.hash !== '#chat') return;
+
+        // Avoid duplicate rendering if the same event is received more than once.
+        if (container.querySelector(`[data-message-id="${rawMessage.id}"]`)) return;
+
+        const result = await chatService.getMessageById(rawMessage.id);
+        if (!result.success) return;
+
+        const user = await authService.getCurrentUser();
+        if (!user) return;
+
+        const empty = container.querySelector('.chat-empty');
+        if (empty) empty.remove();
+
+        const wasNearBottom = container.scrollHeight - container.scrollTop - container.clientHeight < 160;
+        container.insertAdjacentHTML('beforeend', ChatView.renderMessage(result.message, user.id));
+
+        if (wasNearBottom) {
+            container.scrollTop = container.scrollHeight;
+        }
+    }
+
+    removeRealtimeChatMessage(messageId) {
+        const message = document.querySelector(`#chat-messages [data-message-id="${messageId}"]`);
+        if (message) message.remove();
     }
 
     async deleteChatMessage(messageId) {
