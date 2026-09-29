@@ -349,8 +349,18 @@ export const Modals = {
                 <p class="text-danger font-medium mb-4">This action cannot be undone.</p>
                 
                 <div class="form-group">
-                    <label class="form-label">Type DELETE to confirm:</label>
-                    <input type="text" id="delete-acc-confirm" class="form-input" oninput="document.getElementById('btn-del-acc').disabled = (this.value !== 'DELETE')">
+                    <label class="form-label">Type <strong>DELETEMYACCOUNT</strong> to confirm:</label>
+                    <input
+                        type="text"
+                        id="delete-acc-confirm"
+                        class="form-input"
+                        autocomplete="off"
+                        autocapitalize="characters"
+                        spellcheck="false"
+                        placeholder="DELETEMYACCOUNT"
+                        oninput="document.getElementById('btn-del-acc').disabled = (this.value !== 'DELETEMYACCOUNT')"
+                    >
+                    <p class="text-xs text-muted mt-2">You must type the exact phrase <strong>DELETEMYACCOUNT</strong>. This cannot be undone.</p>
                 </div>
             </div>
             <div class="flex flex-col-mobile gap-4">
