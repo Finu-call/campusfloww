@@ -122,3 +122,43 @@ a:hover {
     .flex-col-mobile > * { width: 100% !important; }
     .hidden-mobile { display: none !important; }
 }
+
+/* Mobile app-style visual system */
+@media (max-width: 768px) {
+    :root {
+        --mobile-teal: #155C68;
+        --mobile-teal-dark: #104B55;
+        --mobile-orange: #F5A340;
+        --mobile-surface: #FFFFFF;
+        --mobile-bg: #F3F6F5;
+
+        --bg-primary: var(--mobile-bg);
+        --bg-secondary: var(--mobile-surface);
+        --bg-tertiary: #EAF0EF;
+        --accent-primary: var(--mobile-teal);
+        --accent-hover: var(--mobile-teal-dark);
+        --accent-light: #E5F0F0;
+        --border-color: #E1E8E6;
+        --card-shadow: 0 8px 24px rgba(16, 75, 85, 0.08);
+        --hover-shadow: 0 12px 30px rgba(16, 75, 85, 0.12);
+        --radius-md: 0.9rem;
+        --radius-lg: 1.25rem;
+        --radius-xl: 1.5rem;
+    }
+
+    [data-theme="dark"] {
+        --bg-primary: #0E1719;
+        --bg-secondary: #142124;
+        --bg-tertiary: #1B2D30;
+        --accent-primary: #72B9C1;
+        --accent-hover: #8ACBD2;
+        --accent-light: rgba(114, 185, 193, 0.14);
+        --border-color: #243A3E;
+        --text-primary: #F5FAF9;
+        --text-secondary: #AFC1C0;
+    }
+
+    body {
+        background: var(--bg-primary);
+    }
+}
