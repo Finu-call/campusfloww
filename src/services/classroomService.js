@@ -1,4 +1,5 @@
 import { supabase } from './supabaseClient.js';
+import { pushService } from './pushService.js';
 
 export const classroomService = {
     // --- Classrooms ---
@@ -102,6 +103,7 @@ export const classroomService = {
             
         if (error) return { success: false, message: error.message };
         await this.logActivity(classroomId, postedBy, `Posted an announcement: ${data.title}`);
+        await pushService.notifyClassroom(classroomId, data.title, data.content || 'New announcement posted.', 'announcement', '#announcements');
         return { success: true };
     },
 
