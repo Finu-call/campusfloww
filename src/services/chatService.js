@@ -29,6 +29,27 @@ export const chatService = {
     },
 
     async sendMessage(classroomId, senderId, message) {
+        // Make sure the Supabase auth session is available before the INSERT.
+        // This prevents the first message after login from being rejected by RLS
+        // until the page is refreshed.
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+
+        if (sessionError || !session?.user) {
+            return {
+                success: false,
+                message: 'Your login session is not ready. Please wait a moment and try again.'
+            };
+        }
+
+        // Always use the authenticated Supabase user as sender.
+        const authenticatedUserId = session.user.id;
+        if (senderId && senderId !== authenticatedUserId) {
+            return {
+                success: false,
+                message: 'Your login session changed. Please try again.'
+            };
+        }
+
         const cleanMessage = message.trim();
 
         if (!cleanMessage) {
@@ -43,7 +64,7 @@ export const chatService = {
             .from('classroom_messages')
             .insert({
                 classroom_id: classroomId,
-                sender_id: senderId,
+                sender_id: authenticatedUserId,
                 message: cleanMessage
             })
             .select(`
