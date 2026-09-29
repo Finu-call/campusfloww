@@ -228,6 +228,34 @@ class AppController {
         main.innerHTML = viewHTML;
     }
 
+    showNotificationPopup(notification) {
+        if (!notification) return;
+        document.querySelectorAll('.campus-notification-popup').forEach(el => el.remove());
+        const popup = document.createElement('div');
+        popup.className = 'campus-notification-popup';
+        popup.innerHTML = '<div class="popup-notification-icon"><i class="ph ph-bell-ringing"></i></div>' +
+            '<div class="popup-notification-content"><strong>' + this.escapeNotificationText(notification.title || 'New notification') +
+            '</strong><span>' + this.escapeNotificationText(notification.message || '') + '</span></div>' +
+            '<button class="popup-notification-close" aria-label="Close"><i class="ph ph-x"></i></button>';
+        popup.onclick = (e) => {
+            if (e.target.closest('.popup-notification-close')) {
+                popup.remove();
+                return;
+            }
+            popup.remove();
+            this.openNotification(notification.id, notification.route || '#notifications');
+        };
+        document.body.appendChild(popup);
+        requestAnimationFrame(() => popup.classList.add('show'));
+        setTimeout(() => popup.remove(), 6000);
+    }
+
+    escapeNotificationText(value) {
+        const div = document.createElement('div');
+        div.textContent = value ?? '';
+        return div.innerHTML;
+    }
+
     async updateNotificationBadge(userId) {
         const result = await notificationService.getUnreadCount(userId);
         const badges = document.querySelectorAll('[data-notification-badge]');
@@ -246,7 +274,10 @@ class AppController {
                 schema: 'public',
                 table: 'campus_notifications',
                 filter: `user_id=eq.${userId}`
-            }, () => this.updateNotificationBadge(userId))
+            }, (payload) => {
+                this.updateNotificationBadge(userId);
+                this.showNotificationPopup(payload.new);
+            })
             .subscribe();
     }
 
