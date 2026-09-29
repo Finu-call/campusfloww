@@ -15,6 +15,8 @@ import { supabase } from './services/supabaseClient.js';
 import { notificationService } from './services/notificationService.js';
 import { NotificationView } from './pages/notifications.js';
 import { pushService } from './services/pushService.js';
+import { TimetableView } from './pages/timetable.js';
+import { AnalyticsView } from './pages/analytics.js';
 
 class AppController {
     init() {
@@ -76,6 +78,7 @@ class AppController {
 
     async handleRoute() {
         const user = await authService.getCurrentUser();
+        this.currentUser = user;
         const hash = window.location.hash.substring(1) || '';
         
         const main = document.getElementById('main-content');
@@ -111,6 +114,11 @@ class AppController {
         if (hash === 'notifications') {
             main.innerHTML = await NotificationView.render(user);
             this.updateNotificationBadge(user.id);
+            return;
+        }
+
+        if (hash === 'timetable') {
+            main.innerHTML = TimetableView.render(user);
             return;
         }
         if (this.activeClassroomId && this.realtimeSubscriptions.length === 0) {
@@ -157,6 +165,28 @@ class AppController {
             }
         } else if (hash === 'profile') {
             viewHTML = StudentDashboard.renderProfile(user);
+        } else if (hash === 'analytics') {
+            if (!this.activeClassroomId) {
+                viewHTML = `
+                    <div class="view-container">
+                        <div class="card text-center">
+                            <i class="ph ph-chart-line-up" style="font-size:3rem;color:var(--accent-primary);"></i>
+                            <h2>Select a classroom first</h2>
+                            <p class="text-muted">Open a classroom to view its analytics.</p>
+                            <button class="btn btn-primary" onclick="window.location.hash='dashboard'">View Classrooms</button>
+                        </div>
+                    </div>`;
+            } else {
+                const activeClassroom = classrooms.find(c => c.id === this.activeClassroomId);
+                const members = await classroomService.getMembers(this.activeClassroomId);
+                const [resources, assignments, announcements, activity] = await Promise.all([
+                    resourceService.getResources(this.activeClassroomId),
+                    assignmentService.getAssignments(this.activeClassroomId),
+                    classroomService.getAnnouncements(this.activeClassroomId),
+                    classroomService.getActivity(this.activeClassroomId)
+                ]);
+                viewHTML = AnalyticsView.render({ classroom: activeClassroom, resources, assignments, announcements, members, activity });
+            }
         } else {
             // Classroom specific routes require an active classroom
             if (!this.activeClassroomId) {
@@ -369,10 +399,67 @@ class AppController {
     updateSidebarActive(route) {
         document.querySelectorAll('.nav-item').forEach(item => {
             item.classList.remove('active');
-            if (item.dataset.route === route) {
-                item.classList.add('active');
-            }
+            if (item.dataset.route === route) item.classList.add('active');
         });
+    }
+
+    openTimetableForm(defaultDay = 'Monday') {
+        const days = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+        const dayOptions = days.map(d => `<option ${d === defaultDay ? 'selected' : ''}>${d}</option>`).join('');
+        UI.openModal('timetable-form', `
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="m-0">Add Class</h2>
+                <button class="modal-close" onclick="window.UI.closeModal('timetable-form')"><i class="ph ph-x"></i></button>
+            </div>
+            <form onsubmit="window.App.saveTimetableItem(event)">
+                <div class="form-group mb-4"><label class="form-label">Subject</label><input id="tt-subject" class="form-input" required placeholder="e.g. Circuit Theory"></div>
+                <div class="flex flex-col-mobile gap-4 mb-4">
+                    <div class="form-group" style="flex:1"><label class="form-label">Day</label><select id="tt-day" class="form-select">${dayOptions}</select></div>
+                    <div class="form-group" style="flex:1"><label class="form-label">Time</label><input id="tt-time" type="time" class="form-input" required></div>
+                </div>
+                <div class="flex flex-col-mobile gap-4 mb-4">
+                    <div class="form-group" style="flex:1"><label class="form-label">Teacher</label><input id="tt-teacher" class="form-input" placeholder="Optional"></div>
+                    <div class="form-group" style="flex:1"><label class="form-label">Room</label><input id="tt-room" class="form-input" placeholder="Optional"></div>
+                </div>
+                <button class="btn btn-primary w-full" type="submit"><i class="ph ph-calendar-plus"></i> Save Class</button>
+            </form>`);
+    }
+
+    saveTimetableItem(event) {
+        event.preventDefault();
+        const userId = this.currentUser?.id;
+        if (!userId) return;
+        const items = TimetableView.load(userId);
+        items.push({
+            id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()),
+            subject: document.getElementById('tt-subject').value.trim(),
+            day: document.getElementById('tt-day').value,
+            time: document.getElementById('tt-time').value,
+            teacher: document.getElementById('tt-teacher').value.trim(),
+            room: document.getElementById('tt-room').value.trim()
+        });
+        TimetableView.save(userId, items);
+        UI.closeModal('timetable-form');
+        window.location.hash = '#timetable';
+    }
+
+    deleteTimetableItem(id) {
+        const userId = this.currentUser?.id;
+        if (!userId) return;
+        const items = TimetableView.load(userId).filter(item => item.id !== id);
+        TimetableView.save(userId, items);
+        window.location.hash = '#timetable';
+    }
+
+    toggleAssignmentProgress(classroomId) {
+        const key = 'campusflow_completed_assignments_' + classroomId;
+        const current = Number(localStorage.getItem(key) || 0);
+        const user = this.currentUser;
+        if (!user) return;
+        const max = 999;
+        const next = current < max ? current + 1 : 0;
+        localStorage.setItem(key, String(next));
+        window.location.hash = '#analytics';
     }
 
     // --- Auth Action Handlers ---
