@@ -30,7 +30,6 @@ class AppController {
 
         window.addEventListener('hashchange', () => this.handleRoute());
         this.handleRoute();
-        this.enablePushNotifications();
     }
 
     setActiveClassroom(id) {
@@ -261,12 +260,19 @@ class AppController {
     async enablePushNotifications() {
         if (!pushService.supported()) return;
         const user = await authService.getCurrentUser();
-        if (!user || Notification.permission === 'denied') return;
+        if (!user) return;
+
+        // Ask only after the user is logged in and the app is running.
+        // Browsers can block notification prompts triggered too early.
+        if (Notification.permission === 'denied') return;
+
         try {
             const result = await pushService.register();
-            if (result.success) console.log('CampusFlow push notifications enabled.');
+            if (!result.success) {
+                console.warn('Push notifications:', result.message);
+            }
         } catch (error) {
-            console.warn('Push notification setup skipped:', error);
+            console.warn('Push notification setup failed:', error);
         }
     }
 
