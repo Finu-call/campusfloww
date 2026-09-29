@@ -204,9 +204,10 @@
 
 @media (max-width: 768px) {
     .chat-page {
-        height: calc(100vh - 80px);
+        height: calc(100dvh - 60px);
         min-height: 0;
         padding: 1rem;
+        padding-bottom: 0.75rem;
     }
 
     .chat-bubble-wrapper {
