@@ -118,34 +118,51 @@ export const StudentDashboard = {
     },
 
     renderProfile(user) {
+        const initials = (user.name || 'User').substring(0, 2).toUpperCase();
+        const role = user.role === 'host' ? 'Class Host' : 'Student';
+
         return `
-            <div class="view-container" style="max-width: 600px;">
-                <h1 class="mb-8">My Profile</h1>
-                
-                <div class="card mb-8">
-                    <div class="flex items-center gap-6 mb-6">
-                        <div class="avatar-lg">${user.name.substring(0,2).toUpperCase()}</div>
-                        <div>
-                            <h2 class="mb-1">${user.name}</h2>
-                            <p class="text-muted">${user.email}</p>
+            <div class="view-container" style="max-width: 720px;">
+                <div class="mb-6">
+                    <h1 class="mb-1">My Profile</h1>
+                    <p class="text-muted">Manage your CampusFlow account.</p>
+                </div>
+
+                <div class="profile-mobile-card mb-6">
+                    <div class="flex items-center gap-4">
+                        <div class="avatar-lg" style="background: rgba(255,255,255,0.18); color: #fff; border: 2px solid rgba(255,255,255,0.35);">
+                            ${initials}
                         </div>
-                    </div>
-                    
-                    <div class="flex flex-col gap-4">
-                        <div class="flex justify-between border-b pb-2" style="border-bottom: 1px solid var(--border-color);">
-                            <span class="text-muted">Student ID</span>
-                            <span class="font-medium">${user.studentId || 'N/A'}</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span class="text-muted">Role</span>
-                            <span class="font-medium" style="text-transform: capitalize;">${user.role}</span>
+                        <div style="min-width:0;">
+                            <h2 style="color:#fff; margin-bottom:.25rem;">${user.name}</h2>
+                            <p style="color:rgba(255,255,255,.78); overflow-wrap:anywhere;">${user.email}</p>
+                            <span style="display:inline-block; margin-top:.55rem; padding:.25rem .65rem; border-radius:999px; background:rgba(255,255,255,.16); color:#fff; font-size:.75rem; text-transform:capitalize;">${role}</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="card mb-8">
-                    <h3 class="mb-4">Danger Zone</h3>
-                    <button class="btn btn-primary" style="background: var(--danger); width: 100%;" onclick="window.App.Modals.showDeleteAccountModal()">Delete My Account</button>
+                <div class="card mb-6">
+                    <h3 class="mb-4">Account Information</h3>
+                    <div class="flex flex-col gap-4">
+                        ${user.studentId ? `
+                        <div class="flex justify-between gap-4 border-b pb-2" style="border-bottom:1px solid var(--border-color);">
+                            <span class="text-muted">Student ID</span>
+                            <span class="font-medium" style="text-align:right;">${user.studentId}</span>
+                        </div>` : ''}
+                        <div class="flex justify-between gap-4">
+                            <span class="text-muted">Email</span>
+                            <span class="font-medium" style="text-align:right; overflow-wrap:anywhere;">${user.email}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <button class="btn w-full mb-3" style="background:var(--danger); color:#fff;" onclick="window.App.logout()">
+                        <i class="ph ph-sign-out"></i> Logout
+                    </button>
+                    <button class="btn btn-outline w-full text-danger" onclick="window.App.Modals.showDeleteAccountModal()">
+                        <i class="ph ph-trash"></i> Delete Account
+                    </button>
                 </div>
             </div>
         `;
