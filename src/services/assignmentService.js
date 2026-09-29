@@ -1,5 +1,6 @@
 import { supabase } from './supabaseClient.js';
 import { classroomService } from './classroomService.js';
+import { pushService } from './pushService.js';
 
 export const assignmentService = {
     async getAssignments(classroomId) {
@@ -25,6 +26,7 @@ export const assignmentService = {
             
         if (error) return { success: false, message: error.message };
         await classroomService.logActivity(classroomId, userId, `Created an assignment: ${data.title}`);
+        await pushService.notifyClassroom(classroomId, data.title, data.description || `New assignment${data.dueDate ? ` due ${data.dueDate}` : ''}.`, 'assignment', '#assignments');
         return { success: true };
     },
 
