@@ -27,6 +27,7 @@ class AppController {
         this.activeClassroomId = localStorage.getItem('activeClassroomId') || null;
         this.realtimeSubscriptions = [];
         this.notificationChannel = null;
+        this.pushSetupStarted = false;
 
         window.addEventListener('hashchange', () => this.handleRoute());
         this.handleRoute();
@@ -258,21 +259,33 @@ class AppController {
     }
 
     async enablePushNotifications() {
-        if (!pushService.supported()) return;
-        const user = await authService.getCurrentUser();
-        if (!user) return;
+        if (!pushService.supported()) {
+            UI.showToast('Push notifications are not supported on this browser.', 'error');
+            return { success: false };
+        }
 
-        // Ask only after the user is logged in and the app is running.
-        // Browsers can block notification prompts triggered too early.
-        if (Notification.permission === 'denied') return;
+        const user = await authService.getCurrentUser();
+        if (!user) {
+            UI.showToast('Please log in first.', 'error');
+            return { success: false };
+        }
 
         try {
             const result = await pushService.register();
-            if (!result.success) {
-                console.warn('Push notifications:', result.message);
+            if (result.success) {
+                UI.showToast('Push notifications enabled!', 'success');
+                return result;
             }
+            if (Notification.permission === 'denied') {
+                UI.showToast('Notifications are blocked. Allow notifications for CampusFlow in Chrome site settings.', 'error');
+            } else {
+                UI.showToast(result.message || 'Could not enable notifications.', 'error');
+            }
+            return result;
         } catch (error) {
-            console.warn('Push notification setup failed:', error);
+            console.error('Push notification setup failed:', error);
+            UI.showToast(error?.message || 'Push notification setup failed.', 'error');
+            return { success: false, message: error?.message };
         }
     }
 
