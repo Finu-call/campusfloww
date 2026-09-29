@@ -18,21 +18,41 @@ export const Sidebar = {
         `;
 
         if (isClassroomActive) {
-            bottomNavItems += `
-                <a href="#classroom" class="nav-item" data-route="classroom">
-                    <i class="ph ph-chalkboard"></i><span>Class</span>
-                </a>
-                <a href="#chat" class="nav-item" data-route="chat">
-                    <i class="ph ph-chats"></i><span>Chat</span>
-                </a>
-            `;
+            if (isHost) {
+                bottomNavItems += `
+                    <a href="#resources" class="nav-item" data-route="resources">
+                        <i class="ph ph-books"></i><span>Resources</span>
+                    </a>
+                    <a href="#assignments" class="nav-item" data-route="assignments">
+                        <i class="ph ph-file-text"></i><span>Assignments</span>
+                    </a>
+                    <a href="#announcements" class="nav-item" data-route="announcements">
+                        <i class="ph ph-megaphone"></i><span>Announcements</span>
+                    </a>
+                    <a href="#members" class="nav-item" data-route="members">
+                        <i class="ph ph-users"></i><span>Members</span>
+                    </a>
+                `;
+            } else {
+                bottomNavItems += `
+                    <a href="#classroom" class="nav-item" data-route="classroom">
+                        <i class="ph ph-chalkboard"></i><span>Class</span>
+                    </a>
+                    <a href="#resources" class="nav-item" data-route="resources">
+                        <i class="ph ph-books"></i><span>Resources</span>
+                    </a>
+                    <a href="#assignments" class="nav-item" data-route="assignments">
+                        <i class="ph ph-file-text"></i><span>Assignments</span>
+                    </a>
+                    <a href="#chat" class="nav-item" data-route="chat">
+                        <i class="ph ph-chats"></i><span>Chat</span>
+                    </a>
+                `;
+            }
         } else {
             bottomNavItems += `
                 <a href="#dashboard" class="nav-item" data-route="dashboard">
-                    <i class="ph ph-books"></i><span>Classrooms</span>
-                </a>
-                <a href="#dashboard" class="nav-item" data-route="dashboard">
-                    <i class="ph ph-chats"></i><span>Chat</span>
+                    <i class="ph ph-chalkboard"></i><span>Classrooms</span>
                 </a>
             `;
         }
@@ -41,9 +61,6 @@ export const Sidebar = {
             <a href="#profile" class="nav-item" data-route="profile">
                 <i class="ph ph-user-circle"></i><span>Profile</span>
             </a>
-            <button type="button" class="nav-item mobile-logout-btn" onclick="window.App.logout()">
-                <i class="ph ph-sign-out"></i><span>Logout</span>
-            </button>
         `;
 
         let footerItems = '';
