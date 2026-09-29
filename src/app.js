@@ -12,6 +12,8 @@ import { SharedViews } from './pages/sharedViews.js';
 import { ChatView } from './pages/chat.js';
 import { chatService } from './services/chatService.js';
 import { supabase } from './services/supabaseClient.js';
+import { notificationService } from './services/notificationService.js';
+import { NotificationView } from './pages/notifications.js';
 
 class AppController {
     init() {
@@ -23,6 +25,7 @@ class AppController {
 
         this.activeClassroomId = localStorage.getItem('activeClassroomId') || null;
         this.realtimeSubscriptions = [];
+        this.notificationChannel = null;
 
         window.addEventListener('hashchange', () => this.handleRoute());
         this.handleRoute();
@@ -99,6 +102,11 @@ class AppController {
         }
 
         // Setup realtime if not setup
+        if (hash === 'notifications') {
+            main.innerHTML = await NotificationView.render(user);
+            this.updateNotificationBadge(user.id);
+            return;
+        }
         if (this.activeClassroomId && this.realtimeSubscriptions.length === 0) {
             this.setupRealtime(this.activeClassroomId);
         }
@@ -116,6 +124,8 @@ class AppController {
         sidebarEl.classList.remove('hidden');
         bottomNavEl.classList.remove('hidden');
         Sidebar.render(user, this.activeClassroomId !== null);
+        this.updateNotificationBadge(user.id);
+        this.setupNotificationRealtime(user.id);
         this.updateSidebarActive(hash);
 
         // Auto routing
@@ -216,6 +226,50 @@ class AppController {
         }
 
         main.innerHTML = viewHTML;
+    }
+
+    async updateNotificationBadge(userId) {
+        const result = await notificationService.getUnreadCount(userId);
+        const badges = document.querySelectorAll('[data-notification-badge]');
+        badges.forEach(badge => {
+            badge.textContent = result.count > 99 ? '99+' : String(result.count);
+            badge.classList.toggle('hidden', result.count === 0);
+        });
+    }
+
+    setupNotificationRealtime(userId) {
+        if (this.notificationChannel) return;
+        this.notificationChannel = supabase
+            .channel(`notifications_${userId}`)
+            .on('postgres_changes', {
+                event: 'INSERT',
+                schema: 'public',
+                table: 'campus_notifications',
+                filter: `user_id=eq.${userId}`
+            }, () => this.updateNotificationBadge(userId))
+            .subscribe();
+    }
+
+    async openNotification(notificationId, route) {
+        await notificationService.markRead(notificationId);
+        const user = await authService.getCurrentUser();
+        if (user) await this.updateNotificationBadge(user.id);
+        window.location.hash = route.startsWith('#') ? route : '#classroom';
+    }
+
+    async markAllNotificationsRead() {
+        const user = await authService.getCurrentUser();
+        if (!user) return;
+        const result = await notificationService.markAllRead(user.id);
+        if (result.success) {
+            UI.showToast('All notifications marked as read');
+            this.updateNotificationBadge(user.id);
+            if (window.location.hash === '#notifications') {
+                document.getElementById('main-content').innerHTML = await NotificationView.render(user);
+            }
+        } else {
+            UI.showToast(result.message, 'error');
+        }
     }
 
     updateSidebarActive(route) {
