@@ -9,14 +9,6 @@ export const Sidebar = {
                 <i class="ph ph-house"></i>
                 <span>Dashboard</span>
             </a>
-            <a href="#timetable" class="nav-item" data-route="timetable">
-                <i class="ph ph-calendar"></i>
-                <span>Timetable</span>
-            </a>
-            <a href="#analytics" class="nav-item" data-route="analytics">
-                <i class="ph ph-chart-line-up"></i>
-                <span>Analytics</span>
-            </a>
         `;
         
         let bottomNavItems = `
@@ -30,12 +22,6 @@ export const Sidebar = {
             <a href="#notifications" class="nav-item notification-nav" data-route="notifications">
                 <i class="ph ph-bell"></i><span>Notifications</span>
                 <b data-notification-badge class="notification-badge hidden">0</b>
-            </a>
-            <a href="#timetable" class="nav-item" data-route="timetable">
-                <i class="ph ph-calendar"></i><span>Timetable</span>
-            </a>
-            <a href="#analytics" class="nav-item" data-route="analytics">
-                <i class="ph ph-chart-line-up"></i><span>Analytics</span>
             </a>
         `;
 

@@ -66,19 +66,6 @@ export const StudentDashboard = {
                     <b data-notification-badge class="notification-badge hidden">0</b>
                 </button>
 
-                <div class="student-feature-grid">
-                    <button class="student-feature-card" onclick="window.location.hash='timetable'">
-                        <span class="student-feature-icon timetable"><i class="ph ph-calendar-blank"></i></span>
-                        <span><strong>Class Timetable</strong><small>View and manage your weekly classes</small></span>
-                        <i class="ph ph-caret-right arrow"></i>
-                    </button>
-                    <button class="student-feature-card" onclick="window.location.hash='analytics'">
-                        <span class="student-feature-icon analytics"><i class="ph ph-chart-line-up"></i></span>
-                        <span><strong>My Analytics</strong><small>Track your classroom activity and progress</small></span>
-                        <i class="ph ph-caret-right arrow"></i>
-                    </button>
-                </div>
-
                 <div class="flex gap-4 mb-8" style="flex-wrap: wrap;">
                     <div class="card flex items-center gap-4 cursor-pointer card-hoverable" style="flex: 1; min-width: 200px;" onclick="window.location.hash='#resources'">
                         <div style="background: var(--accent-light); padding: 1rem; border-radius: 50%;">
