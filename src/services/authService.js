@@ -127,11 +127,24 @@ export const authService = {
     },
 
     async deleteAccount() {
-        // Deleting Auth users requires a Service Role key on the backend
-        // For a frontend prototype, this might fail unless an Edge Function handles it.
-        // If Supabase allows self-deletion (it generally doesn't), we try:
-        // Actually, Supabase doesn't support self-deletion via frontend without an Edge function.
-        // We will mock this or provide a stub.
-        return { success: false, message: 'Account deletion must be configured via an Edge Function in production.' };
+        const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+        if (sessionError || !sessionData.session) {
+            return { success: false, message: 'Please log in again before deleting your account.' };
+        }
+
+        const { data, error } = await supabase.functions.invoke('delete-account', {
+            body: {}
+        });
+
+        if (error) {
+            return { success: false, message: error.message || 'Account deletion failed.' };
+        }
+
+        if (data?.error) {
+            return { success: false, message: data.error };
+        }
+
+        await supabase.auth.signOut();
+        return { success: true };
     }
 };
