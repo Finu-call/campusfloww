@@ -266,13 +266,7 @@ class AppController {
         }
 
         try {
-            const result = await pushService.notifyClassroom(
-                null,
-                'CampusFlow test notification',
-                'Push notifications are working on this device.',
-                'test',
-                '#notifications'
-            );
+            const result = await pushService.test();
 
             if (result.success) {
                 UI.showToast('Test notification sent. Check your notification tray.', 'success');
