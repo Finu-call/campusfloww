@@ -640,3 +640,43 @@
   }
   .student-notification-fab .notification-badge.hidden { display:none; }
 }
+
+
+/* Always-visible mobile notifications shortcut */
+.mobile-notifications-btn {
+    position: relative;
+    width: 42px;
+    height: 42px;
+    border: 0;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-secondary);
+    color: var(--accent-primary);
+    box-shadow: var(--card-shadow);
+    cursor: pointer;
+    font-size: 1.25rem;
+}
+
+.mobile-notifications-btn.hidden { display: none; }
+.mobile-notifications-btn .notification-badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    min-width: 19px;
+    height: 19px;
+    padding: 0 5px;
+    border-radius: 999px;
+    background: var(--danger);
+    color: #fff;
+    font-size: .65rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.mobile-notifications-btn .notification-badge.hidden { display: none; }
+
+@media (min-width: 769px) {
+    .mobile-notifications-btn { display: none !important; }
+}
