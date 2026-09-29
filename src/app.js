@@ -9,6 +9,8 @@ import { AuthViews } from './pages/login.js';
 import { HostDashboard } from './pages/hostDashboard.js';
 import { StudentDashboard } from './pages/studentDashboard.js';
 import { SharedViews } from './pages/sharedViews.js';
+import { ChatView } from './pages/chat.js';
+import { chatService } from './services/chatService.js';
 import { supabase } from './services/supabaseClient.js';
 
 class AppController {
@@ -55,6 +57,12 @@ class AppController {
             })
             .on('postgres_changes', { event: '*', schema: 'public', table: 'classroom_members', filter: `classroom_id=eq.${classroomId}` }, () => {
                 if(window.location.hash === '#members' || window.location.hash === '#classroom') this.handleRoute();
+            })
+            .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'classroom_messages', filter: `classroom_id=eq.${classroomId}` }, () => {
+                if (window.location.hash === '#chat') this.refreshChatMessages();
+            })
+            .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'classroom_messages', filter: `classroom_id=eq.${classroomId}` }, () => {
+                if (window.location.hash === '#chat') this.refreshChatMessages();
             })
             .subscribe();
 
@@ -194,6 +202,10 @@ class AppController {
                 case 'announcements': {
                     const announcements = await classroomService.getAnnouncements(this.activeClassroomId);
                     viewHTML = SharedViews.renderAnnouncements(announcements, isHost); 
+                    break;
+                }
+                case 'chat': {
+                    viewHTML = await ChatView.render(this.activeClassroomId, user);
                     break;
                 }
                 default: {
@@ -602,6 +614,63 @@ class AppController {
             UI.closeModal('delete-acc-modal');
             this.logout();
         } else {
+            UI.showToast(result.message, 'error');
+        }
+    }
+
+    // --- Chat Actions ---
+    async sendChatMessage(e) {
+        e.preventDefault();
+
+        const input = document.getElementById('chat-input');
+        if (!input) return;
+
+        const message = input.value.trim();
+        if (!message) return;
+
+        const user = await authService.getCurrentUser();
+        if (!user || !this.activeClassroomId) return;
+
+        const button = e.target.querySelector('button[type="submit"]');
+        if (button) button.disabled = true;
+
+        const result = await chatService.sendMessage(
+            this.activeClassroomId,
+            user.id,
+            message
+        );
+
+        if (result.success) {
+            input.value = '';
+            input.focus();
+        } else {
+            UI.showToast(result.message, 'error');
+        }
+
+        if (button) button.disabled = false;
+    }
+
+    async refreshChatMessages() {
+        const container = document.getElementById('chat-messages');
+        if (!container || window.location.hash !== '#chat') return;
+
+        const user = await authService.getCurrentUser();
+        if (!user || !this.activeClassroomId) return;
+
+        const result = await chatService.getMessages(this.activeClassroomId);
+        if (!result.success) return;
+
+        const wasNearBottom = container.scrollHeight - container.scrollTop - container.clientHeight < 120;
+        container.innerHTML = ChatView.renderMessages(result.messages, user.id);
+
+        if (wasNearBottom) {
+            container.scrollTop = container.scrollHeight;
+        }
+    }
+
+    async deleteChatMessage(messageId) {
+        const result = await chatService.deleteMessage(messageId);
+        if (!result.success) {
             UI.showToast(result.message, 'error');
         }
     }
