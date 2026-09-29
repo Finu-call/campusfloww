@@ -258,6 +258,32 @@ class AppController {
         return div.innerHTML;
     }
 
+    async testPushNotification() {
+        const user = await authService.getCurrentUser();
+        if (!user) {
+            UI.showToast('Please log in first.', 'error');
+            return;
+        }
+
+        try {
+            const result = await pushService.notifyClassroom(
+                null,
+                'CampusFlow test notification',
+                'Push notifications are working on this device.',
+                'test',
+                '#notifications'
+            );
+
+            if (result.success) {
+                UI.showToast('Test notification sent. Check your notification tray.', 'success');
+            } else {
+                UI.showToast(result.message || 'Test notification failed.', 'error');
+            }
+        } catch (error) {
+            UI.showToast(error?.message || 'Test notification failed.', 'error');
+        }
+    }
+
     async enablePushNotifications() {
         if (!pushService.supported()) {
             UI.showToast('Push notifications are not supported on this browser.', 'error');
