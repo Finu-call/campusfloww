@@ -15,6 +15,10 @@ export const Sidebar = {
             <a href="#dashboard" class="nav-item" data-route="dashboard">
                 <i class="ph ph-house"></i><span>Home</span>
             </a>
+            <a href="#notifications" class="nav-item notification-nav" data-route="notifications">
+                <i class="ph ph-bell"></i><span>Notifications</span>
+                <b data-notification-badge class="notification-badge hidden">0</b>
+            </a>
         `;
 
         if (isClassroomActive) {
