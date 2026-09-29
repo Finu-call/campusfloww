@@ -87,9 +87,13 @@ class AppController {
             sidebarEl.classList.remove('open');
         }
 
+        const mobileNotificationsBtn = document.getElementById('mobile-notifications-btn');
+        const mobileNotificationBadge = document.getElementById('mobile-notification-badge');
+
         if (!user) {
             sidebarEl.classList.add('hidden');
             bottomNavEl.classList.add('hidden');
+            if (mobileNotificationsBtn) mobileNotificationsBtn.classList.add('hidden');
             
             if (hash === 'signup') {
                 main.innerHTML = AuthViews.renderSignup();
@@ -125,6 +129,7 @@ class AppController {
         // Render Sidebar
         sidebarEl.classList.remove('hidden');
         bottomNavEl.classList.remove('hidden');
+        if (mobileNotificationsBtn) mobileNotificationsBtn.classList.remove('hidden');
         Sidebar.render(user, this.activeClassroomId !== null);
         this.updateNotificationBadge(user.id);
         this.setupNotificationRealtime(user.id);
@@ -316,6 +321,11 @@ class AppController {
             badge.textContent = result.count > 99 ? '99+' : String(result.count);
             badge.classList.toggle('hidden', result.count === 0);
         });
+        const mobileBadge = document.getElementById('mobile-notification-badge');
+        if (mobileBadge) {
+            mobileBadge.textContent = result.count > 99 ? '99+' : String(result.count);
+            mobileBadge.classList.toggle('hidden', result.count === 0);
+        }
     }
 
     setupNotificationRealtime(userId) {
