@@ -14,6 +14,7 @@ import { chatService } from './services/chatService.js';
 import { supabase } from './services/supabaseClient.js';
 import { notificationService } from './services/notificationService.js';
 import { NotificationView } from './pages/notifications.js';
+import { pushService } from './services/pushService.js';
 
 class AppController {
     init() {
@@ -29,6 +30,7 @@ class AppController {
 
         window.addEventListener('hashchange', () => this.handleRoute());
         this.handleRoute();
+        this.enablePushNotifications();
     }
 
     setActiveClassroom(id) {
@@ -254,6 +256,18 @@ class AppController {
         const div = document.createElement('div');
         div.textContent = value ?? '';
         return div.innerHTML;
+    }
+
+    async enablePushNotifications() {
+        if (!pushService.supported()) return;
+        const user = await authService.getCurrentUser();
+        if (!user || Notification.permission === 'denied') return;
+        try {
+            const result = await pushService.register();
+            if (result.success) console.log('CampusFlow push notifications enabled.');
+        } catch (error) {
+            console.warn('Push notification setup skipped:', error);
+        }
     }
 
     async updateNotificationBadge(userId) {
