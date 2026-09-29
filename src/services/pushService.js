@@ -23,6 +23,26 @@ export const pushService = {
         return { success: true, data };
     },
 
+    async test() {
+        const userResult = await supabase.auth.getUser();
+        const user = userResult.data.user;
+        if (!user) return { success: false, message: 'Please log in first.' };
+
+        const { data, error } = await supabase.functions.invoke('send-push', {
+            body: {
+                user_id: user.id,
+                title: 'CampusFlow test notification',
+                message: 'Push notifications are working on this device.',
+                type: 'test',
+                route: '#notifications'
+            }
+        });
+
+        if (error) return { success: false, message: error.message };
+        if (data?.error) return { success: false, message: data.error };
+        return { success: true, data };
+    },
+
     async register() {
         if (!this.supported() || VAPID_PUBLIC_KEY.startsWith('REPLACE_')) {
             return { success: false, message: 'Push notifications need the VAPID public key configured.' };
