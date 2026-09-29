@@ -117,10 +117,6 @@ class AppController {
             return;
         }
 
-        if (hash === 'timetable') {
-            main.innerHTML = TimetableView.render(user);
-            return;
-        }
         if (this.activeClassroomId && this.realtimeSubscriptions.length === 0) {
             this.setupRealtime(this.activeClassroomId);
         }
@@ -163,6 +159,8 @@ class AppController {
             } else {
                 viewHTML = StudentDashboard.renderClassrooms(classrooms);
             }
+        } else if (hash === 'timetable') {
+            viewHTML = TimetableView.render(user);
         } else if (hash === 'profile') {
             viewHTML = StudentDashboard.renderProfile(user);
         } else if (hash === 'analytics') {
