@@ -203,3 +203,158 @@
         flex-direction: column;
     }
 }
+
+/* Mobile-first refinements */
+@media (max-width: 768px) {
+    html, body {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
+    .app-container {
+        min-height: 100dvh;
+        height: 100dvh;
+        overflow: hidden;
+    }
+
+    .main-content {
+        width: 100%;
+        min-width: 0;
+        height: 100%;
+        overflow-x: hidden;
+        overflow-y: auto;
+        padding-bottom: 0;
+    }
+
+    .mobile-header {
+        flex: 0 0 auto;
+        height: 60px;
+        padding: 0.75rem 1rem;
+    }
+
+    .mobile-header h2 {
+        font-size: 1rem;
+    }
+
+    .mobile-header button {
+        border: 0;
+        background: transparent;
+        color: var(--text-primary);
+        cursor: pointer;
+    }
+
+    .sidebar {
+        width: min(84vw, 320px);
+        height: 100dvh;
+        box-shadow: 10px 0 30px rgba(0,0,0,0.16);
+    }
+
+    .sidebar-nav {
+        padding: 1rem 0.75rem;
+    }
+
+    .sidebar-footer {
+        padding: 0.75rem;
+    }
+
+    .nav-item {
+        min-height: 46px;
+    }
+
+    .view-container {
+        width: 100%;
+        max-width: 100%;
+        padding: 1rem;
+        padding-bottom: 88px;
+    }
+
+    .view-container h1 {
+        font-size: 1.45rem;
+    }
+
+    .view-container h2 {
+        font-size: 1.2rem;
+    }
+
+    .view-container h3 {
+        font-size: 1rem;
+    }
+
+    .bottom-nav {
+        height: calc(64px + env(safe-area-inset-bottom));
+    }
+
+    .bottom-nav-inner {
+        height: 64px;
+    }
+
+    .bottom-nav .nav-item {
+        min-width: 56px;
+        padding: 0.35rem 0.25rem;
+        font-size: 0.65rem;
+    }
+
+    .bottom-nav .nav-item i {
+        font-size: 1.3rem;
+    }
+
+    /* Prevent long classroom/resource names from pushing the layout */
+    .view-container,
+    .card,
+    .flex {
+        min-width: 0;
+    }
+
+    .card {
+        padding: 1rem;
+    }
+
+    /* Stack common page headers */
+    .view-container > .flex.justify-between.items-center {
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .view-container > .flex.justify-between.items-center > * {
+        min-width: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .view-container {
+        padding: 0.8rem;
+        padding-bottom: 86px;
+    }
+
+    .btn {
+        min-height: 42px;
+        padding: 0.6rem 0.85rem;
+    }
+
+    .view-container > .flex.justify-between.items-center > .btn {
+        width: 100%;
+    }
+
+    .tabs {
+        gap: 0.8rem;
+        margin-left: -0.2rem;
+        margin-right: -0.2rem;
+        padding: 0 0.2rem;
+    }
+
+    .tab {
+        font-size: 0.8rem;
+    }
+
+    .toast-container {
+        left: 0.75rem;
+        right: 0.75rem;
+        bottom: calc(74px + env(safe-area-inset-bottom));
+    }
+
+    .toast {
+        width: 100%;
+        padding: 0.85rem 1rem;
+    }
+}
