@@ -30,6 +30,16 @@ export const NotificationView = {
                     ` : ''}
                 </div>
 
+                <div class="card push-notification-card">
+                    <div>
+                        <strong>Background notifications</strong>
+                        <p class="text-muted">Get announcements, assignments and resources even when CampusFlow is not open.</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="window.App.enablePushNotifications()">
+                        <i class="ph ph-bell-ringing"></i> Enable Notifications
+                    </button>
+                </div>
+
                 <div class="notifications-list">
                     ${notifications.length
                         ? notifications.map(n => this.renderNotification(n)).join('')
