@@ -1,5 +1,6 @@
 import { supabase } from './supabaseClient.js';
 import { classroomService } from './classroomService.js';
+import { pushService } from './pushService.js';
 
 export const resourceService = {
     async getResources(classroomId) {
@@ -58,6 +59,7 @@ export const resourceService = {
         if (dbError) return { success: false, message: dbError.message };
         
         await classroomService.logActivity(classroomId, userId, `Uploaded a resource: ${data.title}`);
+        await pushService.notifyClassroom(classroomId, data.title, data.description || 'New learning resource uploaded.', 'resource', '#resources');
         return { success: true, resource: newRes };
     },
     
