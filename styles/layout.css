@@ -622,3 +622,21 @@
         }
     }
 }
+
+
+/* Student notifications floating shortcut */
+.student-notification-fab { display:none; }
+@media (max-width:768px) {
+  .student-notification-fab {
+    display:flex; position:fixed; right:18px; bottom:92px; width:52px; height:52px;
+    border:0; border-radius:50%; align-items:center; justify-content:center;
+    background:var(--accent-primary); color:#fff; font-size:1.35rem;
+    box-shadow:0 8px 22px rgba(16,75,85,.28); z-index:60; cursor:pointer;
+  }
+  .student-notification-fab .notification-badge {
+    position:absolute; top:-3px; right:-3px; min-width:19px; height:19px; padding:0 5px;
+    border-radius:999px; background:var(--danger); color:#fff; font-size:.65rem;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .student-notification-fab .notification-badge.hidden { display:none; }
+}
