@@ -61,6 +61,11 @@ export const StudentDashboard = {
                     </button>
                 </div>
 
+                <button class="student-notification-fab" onclick="window.location.hash='notifications'" aria-label="Open notifications">
+                    <i class="ph ph-bell-ringing"></i>
+                    <b data-notification-badge class="notification-badge hidden">0</b>
+                </button>
+
                 <div class="flex gap-4 mb-8" style="flex-wrap: wrap;">
                     <div class="card flex items-center gap-4 cursor-pointer card-hoverable" style="flex: 1; min-width: 200px;" onclick="window.location.hash='#resources'">
                         <div style="background: var(--accent-light); padding: 1rem; border-radius: 50%;">
