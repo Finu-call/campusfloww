@@ -33,6 +33,9 @@ export const Sidebar = {
                 <a href="#announcements" class="nav-item" data-route="announcements">
                     <i class="ph ph-megaphone"></i><span>Announcements</span>
                 </a>
+                <a href="#chat" class="nav-item" data-route="chat">
+                    <i class="ph ph-chats"></i><span>Chat</span>
+                </a>
                 <a href="#members" class="nav-item" data-route="members">
                     <i class="ph ph-users"></i><span>Members</span>
                 </a>
@@ -42,6 +45,7 @@ export const Sidebar = {
                 <a href="#classroom" class="nav-item" data-route="classroom"><i class="ph ph-chalkboard"></i><span>Class</span></a>
                 <a href="#resources" class="nav-item" data-route="resources"><i class="ph ph-books"></i><span>Resources</span></a>
                 <a href="#announcements" class="nav-item" data-route="announcements"><i class="ph ph-megaphone"></i><span>Updates</span></a>
+                <a href="#chat" class="nav-item" data-route="chat"><i class="ph ph-chats"></i><span>Chat</span></a>
             `;
         }
         
