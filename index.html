@@ -30,9 +30,15 @@
                     <i class="ph-fill ph-graduation-cap text-2xl text-accent-primary"></i>
                     <h2 class="font-bold text-lg">CampusFlow</h2>
                 </div>
-                <button id="mobile-menu-btn" class="p-2 rounded-md hover:bg-bg-tertiary">
-                    <i class="ph ph-list text-2xl"></i>
-                </button>
+                <div class="flex items-center gap-2">
+                    <button id="mobile-notifications-btn" class="mobile-notifications-btn hidden" onclick="window.location.hash='notifications'" aria-label="Open notifications">
+                        <i class="ph ph-bell-ringing"></i>
+                        <b id="mobile-notification-badge" class="notification-badge hidden">0</b>
+                    </button>
+                    <button id="mobile-menu-btn" class="p-2 rounded-md hover:bg-bg-tertiary">
+                        <i class="ph ph-list text-2xl"></i>
+                    </button>
+                </div>
             </header>
 
             <!-- Dynamic content injected here -->
