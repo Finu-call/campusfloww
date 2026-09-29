@@ -14,30 +14,40 @@ create index if not exists classroom_messages_classroom_created_idx
 
 alter table public.classroom_messages enable row level security;
 
--- A user can read messages only from classrooms they belong to.
-drop policy if exists "classroom members can read chat" on public.classroom_messages;
-create policy "classroom members can read chat"
-on public.classroom_messages
-for select
-to authenticated
-using (
-    exists (
+-- Use SECURITY DEFINER helpers so RLS on classroom_members does not
+-- prevent the chat policy from checking membership/host status.
+create or replace function public.can_access_classroom_chat(p_classroom_id uuid)
+returns boolean
+language sql
+security definer
+set search_path = public
+stable
+as $
+    select exists (
         select 1
         from public.classroom_members cm
-        where cm.classroom_id = classroom_messages.classroom_id
+        where cm.classroom_id = p_classroom_id
           and cm.user_id = auth.uid()
           and cm.status = 'active'
     )
     or exists (
         select 1
         from public.classrooms c
-        where c.id = classroom_messages.classroom_id
+        where c.id = p_classroom_id
           and c.host_id = auth.uid()
-    )
-);
+    );
+$;
 
--- A user can send messages only as themselves and only in a classroom
--- where they are an active member or the host.
+revoke all on function public.can_access_classroom_chat(uuid) from public;
+grant execute on function public.can_access_classroom_chat(uuid) to authenticated;
+
+drop policy if exists "classroom members can read chat" on public.classroom_messages;
+create policy "classroom members can read chat"
+on public.classroom_messages
+for select
+to authenticated
+using (public.can_access_classroom_chat(classroom_id));
+
 drop policy if exists "classroom members can send chat" on public.classroom_messages;
 create policy "classroom members can send chat"
 on public.classroom_messages
@@ -45,24 +55,9 @@ for insert
 to authenticated
 with check (
     sender_id = auth.uid()
-    and (
-        exists (
-            select 1
-            from public.classroom_members cm
-            where cm.classroom_id = classroom_messages.classroom_id
-              and cm.user_id = auth.uid()
-              and cm.status = 'active'
-        )
-        or exists (
-            select 1
-            from public.classrooms c
-            where c.id = classroom_messages.classroom_id
-              and c.host_id = auth.uid()
-        )
-    )
+    and public.can_access_classroom_chat(classroom_id)
 );
 
--- Users can delete only their own messages.
 drop policy if exists "users can delete own chat" on public.classroom_messages;
 create policy "users can delete own chat"
 on public.classroom_messages
