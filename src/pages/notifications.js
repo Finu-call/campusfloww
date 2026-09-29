@@ -35,9 +35,14 @@ export const NotificationView = {
                         <strong>Background notifications</strong>
                         <p class="text-muted">Get announcements, assignments and resources even when CampusFlow is not open.</p>
                     </div>
-                    <button class="btn btn-primary" onclick="window.App.enablePushNotifications()">
-                        <i class="ph ph-bell-ringing"></i> Enable Notifications
-                    </button>
+                    <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                        <button class="btn btn-primary" onclick="window.App.enablePushNotifications()">
+                            <i class="ph ph-bell-ringing"></i> Enable Notifications
+                        </button>
+                        <button class="btn btn-outline" onclick="window.App.testPushNotification()">
+                            <i class="ph ph-paper-plane-tilt"></i> Test
+                        </button>
+                    </div>
                 </div>
 
                 <div class="notifications-list">
