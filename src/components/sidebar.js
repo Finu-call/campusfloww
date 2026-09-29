@@ -17,6 +17,14 @@ export const Sidebar = {
             </a>
         `;
 
+        // Keep Notifications immediately after Home so it is always visible on mobile.
+        bottomNavItems += `
+            <a href="#notifications" class="nav-item notification-nav" data-route="notifications">
+                <i class="ph ph-bell"></i><span>Notifications</span>
+                <b data-notification-badge class="notification-badge hidden">0</b>
+            </a>
+        `;
+
         if (isClassroomActive) {
             if (isHost) {
                 bottomNavItems += `
@@ -58,10 +66,6 @@ export const Sidebar = {
         }
 
         bottomNavItems += `
-            <a href="#notifications" class="nav-item notification-nav" data-route="notifications">
-                <i class="ph ph-bell"></i><span>Notifications</span>
-                <b data-notification-badge class="notification-badge hidden">0</b>
-            </a>
             <a href="#profile" class="nav-item" data-route="profile">
                 <i class="ph ph-user-circle"></i><span>Profile</span>
             </a>
