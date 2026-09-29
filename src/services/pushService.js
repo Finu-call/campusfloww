@@ -14,6 +14,15 @@ export const pushService = {
         return 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window;
     },
 
+    async notifyClassroom(classroomId, title, message, type = 'classroom', route = '#notifications') {
+        const { data, error } = await supabase.functions.invoke('send-push', {
+            body: { classroom_id: classroomId, title, message, type, route }
+        });
+        if (error) return { success: false, message: error.message };
+        if (data?.error) return { success: false, message: data.error };
+        return { success: true, data };
+    },
+
     async register() {
         if (!this.supported() || VAPID_PUBLIC_KEY.startsWith('REPLACE_')) {
             return { success: false, message: 'Push notifications need the VAPID public key configured.' };
