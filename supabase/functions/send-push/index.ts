@@ -49,6 +49,13 @@ Deno.serve(async (req) => {
       });
     }
 
+    if (userId && !classroomId && userId !== callerId) {
+      return new Response(JSON.stringify({ error: "You can only send a direct test notification to your own account" }), {
+        status: 403,
+        headers: { "Content-Type": "application/json" }
+      });
+    }
+
     if (classroomId) {
       const { data: classroom, error: classroomError } = await supabase
         .from("classrooms")
@@ -116,7 +123,12 @@ Deno.serve(async (req) => {
 
     let sent = 0;
     let removed = 0;
-    const payload = JSON.stringify({ title, message, route });
+    const payload = JSON.stringify({
+      title,
+      message,
+      route,
+      type
+    });
 
     for (const subscription of subscriptions || []) {
       try {
