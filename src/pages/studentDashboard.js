@@ -51,9 +51,14 @@ export const StudentDashboard = {
 
         return `
             <div class="view-container">
-                <div class="mb-8">
-                    <h1 class="mb-1">Good morning, ${user.name.split(' ')[0]} 👋</h1>
-                    <p class="text-muted">Welcome to ${classroom.name}.</p>
+                <div class="mb-6 flex items-center justify-between gap-4" style="flex-wrap:wrap;">
+                    <div>
+                        <h1 class="mb-1">Good morning, ${user.name.split(' ')[0]} 👋</h1>
+                        <p class="text-muted">Welcome to ${classroom.name}.</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="window.location.hash='notifications'" style="white-space:nowrap;">
+                        <i class="ph ph-bell-ringing"></i> Notifications
+                    </button>
                 </div>
 
                 <div class="flex gap-4 mb-8" style="flex-wrap: wrap;">
