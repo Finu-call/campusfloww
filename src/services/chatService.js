@@ -18,14 +18,42 @@ export const chatService = {
                 )
             `)
             .eq('classroom_id', classroomId)
-            .order('created_at', { ascending: true });
+            .order('created_at', { ascending: false })
+            .limit(100);
 
         if (error) {
             console.error('Chat load error:', error);
             return { success: false, message: error.message, messages: [] };
         }
 
-        return { success: true, messages: data || [] };
+        return { success: true, messages: (data || []).reverse() };
+    },
+
+    async getMessageById(messageId) {
+        const { data, error } = await supabase
+            .from('classroom_messages')
+            .select(`
+                id,
+                classroom_id,
+                sender_id,
+                message,
+                created_at,
+                profiles (
+                    id,
+                    name,
+                    avatar_url,
+                    role
+                )
+            `)
+            .eq('id', messageId)
+            .single();
+
+        if (error) {
+            console.error('Chat message load error:', error);
+            return { success: false, message: error.message };
+        }
+
+        return { success: true, message: data };
     },
 
     async sendMessage(classroomId, senderId, message) {
